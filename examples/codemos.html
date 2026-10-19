@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>개인정보 수집·이용·제공 동의 및 제3자 제공 등 고지</title>
+<style>
+/* ===== 원본 가정통신문(한글 HWP→PDF) 실측 서식 =====
+   본문 10pt / 머리행 13pt 굵게 / 보유기간 값 12pt 굵게+밑줄 / 3자 이용목적 값 11pt 굵게+밑줄
+   머리행 배경 #DFE6F7, 위 1.1pt 실선, 아래 이중선 / 업체 사이 이중선 / 칸 안 구역 사이 0.4pt 실선
+   표 너비 487pt (구분 70pt + 고지 417pt), 바깥 세로선 없음 */
+:root{
+  --font: "HCR Dotum","함초롬돋움","HCRDotum","맑은 고딕","Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR","Noto Sans CJK KR","NanumGothic",sans-serif;
+  --head-bg:#DFE6F7; --red:#FF0000;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#f3f4f6;color:#000}
+body{font-family:var(--font);padding:16px 8px 48px}
+.toolbar{max-width:650px;margin:0 auto 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px}
+.toolbar h1{font-size:15px;margin:0 auto 0 0;font-weight:700}
+.toolbar button{font:inherit;font-size:13px;padding:7px 12px;border:1px solid #9aa7c7;background:#fff;border-radius:6px;cursor:pointer}
+.toolbar button.primary{background:#3b5bdb;border-color:#3b5bdb;color:#fff;font-weight:700}
+.toolbar button[aria-pressed="true"]{background:#fff3bf;border-color:#f59f00}
+.hint{max-width:650px;margin:0 auto 10px;font-size:12px;color:#555;line-height:1.5}
+.sheet{max-width:650px;margin:0 auto;background:#fff;padding:18px 10px;box-shadow:0 1px 4px rgba(0,0,0,.12);overflow-x:auto}
+
+table.consent{width:487pt;max-width:100%;margin:0 auto;border-collapse:collapse;table-layout:fixed;
+  font-family:var(--font);font-size:10pt;line-height:13pt;letter-spacing:-0.04em;color:#000}
+table.consent col.c1{width:70pt} table.consent col.c2{width:auto}
+table.consent th{background:var(--head-bg);font-size:13pt;font-weight:700;line-height:15pt;height:18.5pt;
+  padding:1.5pt 4pt;text-align:center;border-top:1.1pt solid #000;border-bottom:1.6pt double #000;letter-spacing:0}
+table.consent th + th{border-left:0.4pt solid #000}
+td.name{text-align:center;vertical-align:middle;padding:3pt 3pt;border-right:0.4pt solid #000;word-break:keep-all;overflow-wrap:anywhere}
+td.body{padding:0;vertical-align:top}
+tr.row > td{border-bottom:2pt double #000}
+.blk{padding:2pt 5pt 4pt 5pt}
+.blk + .blk{border-top:0.4pt solid #000}
+.blk.gap{padding-top:6pt}
+.blk + .blk.ov{border-top:2.4pt double #000} /* 원본: 3자 제공 고지와 국외 이전 고지 사이는 이중선 */
+.ln{padding-left:1.4em;text-indent:-1.4em;word-break:normal;overflow-wrap:anywhere;text-align:justify}
+.ln.hang{display:flex;text-indent:0;padding-left:0}
+.ln.hang > .lead{white-space:nowrap;flex:none}
+.ln.hang > .rest{flex:1 1 auto}
+.b{font-weight:700}
+.u12{font-weight:700;font-size:12pt;text-decoration:underline;text-decoration-thickness:0.5pt;text-underline-offset:2pt}
+.u11{font-weight:700;font-size:11pt;text-decoration:underline;text-decoration-thickness:0.5pt;text-underline-offset:2pt}
+.red{color:var(--red)}
+.agree{margin:3.5pt 2pt 0.5pt 1.5pt;background:var(--head-bg);border:0.4pt solid #000;min-height:19.5pt;
+  display:flex;align-items:center;justify-content:center;font-weight:700;padding:2pt 4pt;text-indent:0;white-space:nowrap}
+.box{display:inline-block;width:0.9em;height:0.9em;border:0.6pt solid #000;vertical-align:-0.12em;margin:0 0.5em 0 0.9em;background:transparent}
+.need{background:#fff3bf;outline:1px dashed #f59f00}
+
+/* 클릭 복사 */
+.cp{cursor:copy;border-radius:2px;transition:background .12s}
+.cp:hover{background:rgba(59,91,219,.10)}
+.cp.flash{background:rgba(59,91,219,.25)}
+.blk{position:relative}
+.blkcopy{position:absolute;top:2pt;right:3pt;font:11px var(--font);padding:1px 6px;border:1px solid #9aa7c7;border-radius:4px;background:#fff;color:#3b5bdb;cursor:pointer;opacity:0;transition:opacity .15s;text-indent:0}
+.blk:hover .blkcopy,.blkcopy:focus{opacity:1}
+@media (hover:none){.blkcopy{opacity:.85}}
+body.editing .cp{cursor:text}
+body.editing [contenteditable="true"]{outline:1px dashed #f59f00;background:#fffbe6}
+
+#toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:#222;color:#fff;
+  font-size:14px;padding:8px 18px;border-radius:999px;opacity:0;pointer-events:none;transition:all .2s;z-index:10}
+#toast.on{opacity:.92;transform:translateX(-50%) translateY(0)}
+
+@media print{
+  body{background:#fff;padding:0} .toolbar,.hint,.blkcopy,#toast{display:none!important}
+  .sheet{box-shadow:none;padding:0;max-width:none} .cp:hover{background:none} .need{background:none;outline:none}
+  thead{display:table-header-group} tr.row{break-inside:auto}
+  @page{size:A4;margin:15mm 14mm}
+}
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <h1>개인정보 수집·이용·제공 동의 표</h1>
+  <button class="primary" id="btnAll" type="button">전체 복사</button>
+  <button id="btnText" type="button">글자만 복사</button>
+  <button id="btnEdit" type="button" aria-pressed="false">고치기</button>
+  <button id="btnPrint" type="button">인쇄</button>
+</div>
+<p class="hint">줄이나 칸을 누르면 바로 복사돼요. 칸에 마우스를 올리면 나오는 <b>칸 복사</b>는 그 칸 전체를 복사해요. <b>전체 복사</b>는 표 모양 그대로 복사되어 한글·워드에 붙여 넣을 수 있어요. 노란 칸은 <b>[확인 필요]</b> 항목이에요.</p>
+<div class="sheet"><table class="consent" id="consent">
+  <colgroup><col class="c1"><col class="c2"></colgroup>
+  <thead><tr><th>구분</th><th>개인정보 수집·이용·제공 동의 및 제3자 제공 등 고지</th></tr></thead>
+  <tbody id="rows"></tbody>
+</table></div>
+<div id="toast" role="status" aria-live="polite">복사됨</div>
+
+<!-- ===== 데이터: 이 JSON만 바꾸면 표가 만들어집니다. **글자** = 굵게 ===== -->
+<script id="consent-data" type="application/json">
+{
+  "services": [
+    {
+      "name": "코드모스",
+      "collect": {
+        "purpose": "회원 가입 및 관리, 교육서비스 제공, 서비스 이용 기록, 접속 빈도 및 서비스 이용에 대한 통계",
+        "items": "소속학교, 아이디, 이름, 비밀번호, 학습데이터, 학습시간, AI콘텐츠 이용정보",
+        "retention": "해당 학년도 교육과정 종료 시까지"
+      },
+      "thirdParty": {
+        "recipient": "코드모스",
+        "purpose": "에듀테크 서비스 내 학생 계정 생성 및 서비스 제공",
+        "items": "소속학교, 아이디, 이름, 비밀번호, 학습데이터, 학습시간, AI콘텐츠 이용정보",
+        "retention": "해당 학년도 교육과정 종료 시까지"
+      },
+      "overseas": {
+        "recipient": "코드모스",
+        "method": "**미국에서** 제공하는 클라우드 서버에 저장",
+        "items": "AI콘텐츠 이용정보",
+        "retention": "해당 학년도 교육과정 종료 시까지"
+      }
+    }
+  ]
+}
+</script>
+<script>
+(function(){
+  "use strict";
+  var DATA = JSON.parse(document.getElementById("consent-data").textContent);
+  var REFUSE = "개인정보 수집․이용에 대한 동의를 거부할 수 있습니다. 동의를 거부할 경우 해당 에듀테크를 활용한 맞춤형 학습 지원 및 수업 활동 참여가 제한될 수 있습니다.";
+
+  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+  function md(s){ // 이스케이프 후 **굵게**, [확인 필요] 강조
+    return esc(s).replace(/\*\*(.+?)\*\*/g,'<span class="b">$1</span>')
+                 .replace(/\[확인 필요[^\]]*\]/g,function(m){return '<span class="need">'+m+'</span>';});
+  }
+  function plain(s){return String(s==null?"":s).replace(/\*\*(.+?)\*\*/g,"$1");}
+  function v(s,cls){return '<span class="v'+(cls?' '+cls:'')+'" data-k>'+md(s)+'</span>';}
+  function ln(html,extra){return '<div class="ln cp'+(extra?' '+extra:'')+'">'+html+'</div>';}
+
+  function collect(c){
+    return '<div class="blk">'+
+      '<div class="ln cp hang"><span class="lead">1. <span class="b">수집·이용 목적</span>:&nbsp;</span><span class="rest">'+v(c.purpose)+'</span></div>'+
+      ln('2. <span class="b">수집 항목</span>: '+v(c.items))+
+      ln('3. <span class="b">보유 및 이용 기간: </span>'+v(c.retention,"u12"))+
+      ln('4. '+esc(REFUSE))+
+      '<div class="agree cp">개인정보 수집·이용에<span class="box"></span>동의합니다.<span class="box"></span>동의하지 않습니다.</div>'+
+      '</div>';
+  }
+  function third(t){
+    return '<div class="blk">'+
+      ln('<span class="b">◆ 개인정보의 제3자 제공 고지</span>')+
+      ln('1. <span class="b">개인정보를 제공받는 자</span>: '+v(t.recipient))+
+      ln('2. <span class="b">제공받는 자의 이용 목적</span>: '+v(t.purpose,"u11"))+
+      ln('3. <span class="b">제공하는 개인정보 항목</span>: '+v(t.items))+
+      ln('4. <span class="b">제공받는 자의 보유 및 이용기간</span>: '+v(t.retention,"u12"))+
+      '</div>';
+  }
+  function overseas(o){
+    return '<div class="blk ov">'+
+      ln('<span class="b">◆ 개인정보 국외 이전 고지</span>')+
+      ln('<span class="b">1. 개인정보를 이전받는 자 : '+v(o.recipient)+'</span>')+
+      ln('<span class="b">2. 이전되는 국가, 시기 및 방법 : </span>'+v(o.method,"red"))+
+      ln('<span class="b">3. 이전되는 개인정보 항목 : '+v(o.items)+'</span>')+
+      ln('<span class="b">4. 보유 및 이용 기간 : </span>'+v(o.retention,"u12"))+
+      '</div>';
+  }
+  function render(){
+    var h="";
+    (DATA.services||[]).forEach(function(s){
+      h+='<tr class="row"><td class="name cp">'+md(s.name)+'</td><td class="body">'+
+         collect(s.collect||{})+third(s.thirdParty||{})+(s.overseas?overseas(s.overseas):"")+'</td></tr>';
+    });
+    document.getElementById("rows").innerHTML=h;
+    document.querySelectorAll(".blk").forEach(function(b){
+      var btn=document.createElement("button");btn.type="button";btn.className="blkcopy";btn.textContent="칸 복사";
+      btn.addEventListener("click",function(e){e.stopPropagation();copyNode(b,btn);});b.appendChild(btn);
+    });
+  }
+
+  // ---- 텍스트 만들기
+  function textOf(el){
+    var c=el.cloneNode(true);
+    c.querySelectorAll(".blkcopy").forEach(function(x){x.remove();});
+    c.querySelectorAll(".box").forEach(function(x){x.textContent=" □ ";});
+    if(c.classList&&c.classList.contains("blk")||c.querySelector&&c.querySelector(".ln")){
+      return Array.prototype.map.call(c.querySelectorAll(".ln,.agree"),function(l){return norm(l.textContent);}).join("\n");
+    }
+    return norm(c.textContent);
+  }
+  function norm(s){return s.replace(/[ \t\u00a0]+/g," ").replace(/ ?□ ?/g,"  □ ").replace(/^\s+|\s+$/g,"").replace(/^□/,"□");}
+  function tableText(){
+    var out=[];
+    document.querySelectorAll("#rows tr.row").forEach(function(tr){
+      out.push("■ "+norm(tr.querySelector("td.name").textContent));
+      tr.querySelectorAll(".blk").forEach(function(b){out.push(textOf(b));out.push("");});
+    });
+    return out.join("\n").replace(/\n{3,}/g,"\n\n").trim();
+  }
+  // ---- 서식 붙은 HTML (한글/워드 붙여넣기용): 계산된 스타일을 인라인으로
+  var PROPS=["font-family","font-size","font-weight","text-decoration-line","text-decoration-style","color","background-color","text-align","vertical-align",
+    "border-top","border-bottom","border-left","border-right","padding-top","padding-bottom","padding-left","padding-right","line-height","width","text-indent","margin-top","margin-bottom","margin-left","margin-right"];
+  function inlineClone(src){
+    var dst=src.cloneNode(true);
+    var a=[src].concat(Array.prototype.slice.call(src.querySelectorAll("*")));
+    var b=[dst].concat(Array.prototype.slice.call(dst.querySelectorAll("*")));
+    a.forEach(function(el,i){
+      var cs=getComputedStyle(el),st="";
+      PROPS.forEach(function(p){var val=cs.getPropertyValue(p);if(val&&val!=="none"&&val!=="normal"&&val!=="auto")st+=p+":"+val+";";});
+      if(el.classList.contains("box")){b[i].textContent="□";st="font-weight:700;";}
+      if(el.classList.contains("agree"))st+="text-align:center;";
+      if(el.classList.contains("need"))st=st.replace(/background-color:[^;]+;/,"");
+      b[i].setAttribute("style",st);b[i].removeAttribute("class");b[i].removeAttribute("contenteditable");
+    });
+    b.forEach(function(el){if(el.tagName==="BUTTON")el.remove();});
+    return dst;
+  }
+  function htmlOf(el){var d=inlineClone(el);return '<meta charset="utf-8">'+d.outerHTML;}
+
+  // ---- 클립보드
+  function fallbackCopy(text){
+    var ta=document.createElement("textarea");ta.value=text;ta.setAttribute("readonly","");ta.style.position="fixed";ta.style.top="-1000px";
+    document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand("copy");}catch(e){}ta.remove();return ok;
+  }
+  function writeClip(text,html){
+    if(html&&window.ClipboardItem&&navigator.clipboard&&navigator.clipboard.write){
+      return navigator.clipboard.write([new ClipboardItem({"text/plain":new Blob([text],{type:"text/plain"}),"text/html":new Blob([html],{type:"text/html"})})])
+        .catch(function(){return writeClip(text,null);});
+    }
+    if(navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext){
+      return navigator.clipboard.writeText(text).catch(function(){if(!fallbackCopy(text))throw new Error("copy");});
+    }
+    return fallbackCopy(text)?Promise.resolve():Promise.reject(new Error("copy"));
+  }
+  var tt;
+  function toast(msg){var t=document.getElementById("toast");t.textContent=msg||"복사됨";t.classList.add("on");clearTimeout(tt);tt=setTimeout(function(){t.classList.remove("on");},1200);}
+  function flash(el){el.classList.add("flash");setTimeout(function(){el.classList.remove("flash");},350);}
+  function copyNode(el,flashEl){
+    writeClip(textOf(el),null).then(function(){toast("복사됨");flash(flashEl&&flashEl.closest?(flashEl.closest(".blk")||el):el);},function(){toast("복사 실패 — 직접 선택해 주세요");});
+  }
+
+  document.addEventListener("click",function(e){
+    if(document.body.classList.contains("editing"))return;
+    if(window.getSelection&&String(window.getSelection())!=="")return; // 드래그 선택 중이면 무시
+    var el=e.target.closest(".cp");if(!el)return;copyNode(el);
+  });
+  document.getElementById("btnAll").addEventListener("click",function(){
+    var tbl=document.getElementById("consent");
+    writeClip(tableText(),htmlOf(tbl)).then(function(){toast("전체 복사됨");},function(){toast("복사 실패");});
+  });
+  document.getElementById("btnText").addEventListener("click",function(){
+    writeClip(tableText(),null).then(function(){toast("복사됨");},function(){toast("복사 실패");});
+  });
+  document.getElementById("btnEdit").addEventListener("click",function(){
+    var on=!document.body.classList.contains("editing");
+    document.body.classList.toggle("editing",on);this.setAttribute("aria-pressed",String(on));this.textContent=on?"고치기 끝":"고치기";
+    document.querySelectorAll(".v,td.name").forEach(function(x){x.contentEditable=on?"true":"false";});
+    toast(on?"고칠 글자를 눌러 수정하세요":"수정 완료");
+  });
+  document.getElementById("btnPrint").addEventListener("click",function(){window.print();});
+  render();
+})();
+</script>
+</body>
+</html>
