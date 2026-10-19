@@ -49,6 +49,13 @@ tr.row > td{border-bottom:2pt double #000}
   display:flex;align-items:center;justify-content:center;font-weight:700;padding:2pt 4pt;text-indent:0;white-space:nowrap}
 .box{display:inline-block;width:0.9em;height:0.9em;border:0.6pt solid #000;vertical-align:-0.12em;margin:0 0.5em 0 0.9em;background:transparent}
 .need{background:#fff3bf;outline:1px dashed #f59f00}
+/* 근거표(접기) */
+details.ev{max-width:650px;margin:14px auto 0;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.12);padding:10px 12px;font-size:13px;line-height:1.5}
+details.ev summary{cursor:pointer;font-weight:700;font-size:14px}
+details.ev h3{font-size:14px;margin:12px 0 4px} details.ev ul{margin:0 0 6px;padding-left:18px}
+details.ev table{border-collapse:collapse;width:100%;table-layout:fixed}
+details.ev th,details.ev td{border:1px solid #999;padding:4px 6px;vertical-align:top;word-break:keep-all;overflow-wrap:anywhere}
+details.ev th{background:var(--head-bg)}
 
 /* 클릭 복사 */
 .cp{cursor:copy;border-radius:2px;transition:background .12s}
@@ -66,7 +73,7 @@ body.editing [contenteditable="true"]{outline:1px dashed #f59f00;background:#fff
 #toast.on{opacity:.92;transform:translateX(-50%) translateY(0)}
 
 @media print{
-  body{background:#fff;padding:0} .toolbar,.hint,.blkcopy,#toast{display:none!important}
+  body{background:#fff;padding:0} .toolbar,.hint,.blkcopy,#toast,details.ev{display:none!important}
   .sheet{box-shadow:none;padding:0;max-width:none} .cp:hover{background:none} .need{background:none;outline:none}
   thead{display:table-header-group} tr.row{break-inside:auto}
   @page{size:A4;margin:15mm 14mm}
@@ -87,14 +94,23 @@ body.editing [contenteditable="true"]{outline:1px dashed #f59f00;background:#fff
   <thead><tr><th>구분</th><th>개인정보 수집·이용·제공 동의 및 제3자 제공 등 고지</th></tr></thead>
   <tbody id="rows"></tbody>
 </table></div>
+<details class="ev" id="evbox" hidden><summary>근거표 보기 (동의서 값 ↔ 처리방침 원문)</summary><div id="ev"></div></details>
 <div id="toast" role="status" aria-live="polite">복사됨</div>
 
 <!-- ===== 데이터: 이 JSON만 바꾸면 표가 만들어집니다. **글자** = 굵게 ===== -->
 <script id="consent-data" type="application/json">
 {
+  "school": "○○초등학교",
+  "deadline": "OO월 OO일(요일)",
+  "date": "2026.    .    .",
   "services": [
     {
       "name": "코드모스",
+      "policy": {
+        "url": "https://logibros.notion.site/2f73188c425b80cb8c7ccf6ac00a63f4",
+        "version": "2026년 3월 1일 시행",
+        "checked": "2026-10-19"
+      },
       "collect": {
         "purpose": "회원 가입 및 관리, 교육서비스 제공, 서비스 이용 기록, 접속 빈도 및 서비스 이용에 대한 통계",
         "items": "소속학교, 아이디, 이름, 비밀번호, 학습데이터, 학습시간, AI콘텐츠 이용정보",
@@ -107,10 +123,37 @@ body.editing [contenteditable="true"]{outline:1px dashed #f59f00;background:#fff
         "retention": "해당 학년도 교육과정 종료 시까지"
       },
       "overseas": {
-        "recipient": "코드모스",
-        "method": "**미국에서** 제공하는 클라우드 서버에 저장",
-        "items": "AI콘텐츠 이용정보",
+        "recipient": "OpenAI, LLC",
+        "method": "**미국**으로 회원가입 즉시 정보통신망을 통해 업무 상 필요 시 수시로 이전",
+        "items": "AI콘텐츠 이용정보(대화 내용, 업로드 파일, 입력/결과물)",
         "retention": "해당 학년도 교육과정 종료 시까지"
+      },
+      "evidence": {
+        "purpose": {
+          "value": "회원 가입 및 관리, 교육서비스 제공, 서비스 이용 기록, 접속 빈도 및 서비스 이용에 대한 통계",
+          "quote": "회원 가입 및 관리: 회원 가입의사 확인, 회원제 서비스 제공에 따른 본인 식별·인증, 회원자격 유지·관리, 서비스 부정이용 방지, 각종 고지·통지 / 교육 서비스 제공: 코딩 교육 콘텐츠 제공, 학습 진도 및 성과 관리, 맞춤형 학습 서비스 제공, 학습 통계 및 분석, AI 기반 교육 서비스 제공 및 튜터링 답변 생성 / 서비스 이용 기록, 접속 빈도 및 서비스 이용에 대한 통계",
+          "note": "1. 개인정보의 처리 목적. 결제·교육자 대상 광고 목적은 학생과 관계없어 뺐습니다."
+        },
+        "items": {
+          "value": "소속학교, 아이디, 이름, 비밀번호, 학습데이터, 학습시간, AI콘텐츠 이용정보",
+          "quote": "소속 학교, 아이디, 이름, 비밀번호 / 학습 데이터, 학습 시간 / AI 콘텐츠 이용 정보 (대화 내용, 업로드 파일, 입력/결과물)",
+          "note": "2. 처리 및 보유 기간 표(학생 회원). 자동 수집 정보(IP주소, 쿠키, 접속일시, 서비스 이용기록)는 동의 없이 수집된다고 적혀 있습니다."
+        },
+        "retention": {
+          "value": "해당 학년도 교육과정 종료 시까지",
+          "quote": "소속 학교, 아이디, 이름, 비밀번호 … 회원 탈퇴 시까지 / 학습 데이터, 학습 시간 … 회원 탈퇴 후 즉시 삭제",
+          "note": "처리방침 기간은 '회원 탈퇴 시까지'입니다. 학년도 말에 학교가 학생 계정을 탈퇴 처리해야 동의서 기간과 맞습니다."
+        },
+        "recipient": {
+          "value": "코드모스",
+          "quote": "주식회사 코드모스(이하 '회사')는 「개인정보 보호법」 제30조에 따라 … 개인정보 처리방침을 수립·공개합니다.",
+          "note": "운영사 정식 명칭은 '주식회사 코드모스'입니다."
+        },
+        "overseas": {
+          "value": "OpenAI, LLC / 미국 / AI콘텐츠 이용정보",
+          "quote": "개인정보를 이전 받는 자 OpenAI, LLC … 위탁하는 개인정보 항목 AI 콘텐츠 이용 정보 (대화 내용, 업로드 파일, 입력/결과물) … 개인정보 이전 시기 및 방법 회원가입 즉시 정보통신망을 통해 업무 상 필요 시 수시로 이전",
+          "note": "7. 개인정보의 국외이전. 이전 국가 '미국'은 6. 처리위탁 표(OpenAI, LMS 내 AI 콘텐츠 API 연결, 미국)에 있습니다. Google LLC·Tally BV 이전은 설문조사용이라 학생 동의서에서는 뺐습니다. 서버(AWS)는 대한민국(서울 리전)입니다."
+        }
       }
     }
   ]
@@ -169,6 +212,22 @@ body.editing [contenteditable="true"]{outline:1px dashed #f59f00;background:#fff
       var btn=document.createElement("button");btn.type="button";btn.className="blkcopy";btn.textContent="칸 복사";
       btn.addEventListener("click",function(e){e.stopPropagation();copyNode(b,btn);});b.appendChild(btn);
     });
+  }
+
+  function renderEvidence(){
+    var F=[["recipient","운영사(제공받는 자)"],["purpose","수집·이용 목적"],["items","수집 항목"],["retention","보유 및 이용 기간"],["overseas","국외 이전"]];
+    var h="",any=false;
+    (DATA.services||[]).forEach(function(s){
+      var ev=s.evidence||{},p=s.policy||{};
+      if(!s.evidence&&!s.policy)return; any=true;
+      h+="<h3>"+esc(s.name)+"</h3><ul><li>처리방침: "+md(p.url||"[확인 필요]")+"</li><li>버전(시행일): "+md(p.version||"[확인 필요]")+"</li><li>확인한 날짜: "+md(p.checked||"[확인 필요]")+"</li></ul>";
+      h+="<table><thead><tr><th style=\"width:17%\">항목</th><th style=\"width:25%\">동의서에 쓴 값</th><th>처리방침 원문</th><th style=\"width:22%\">비고</th></tr></thead><tbody>";
+      F.forEach(function(f){var e=ev[f[0]]||{};
+        var val=e.value||(f[0]==="recipient"?(s.thirdParty||{}).recipient:f[0]==="overseas"?(s.overseas?[s.overseas.recipient,s.overseas.method,s.overseas.items].join(" / "):"없음"):(s.collect||{})[f[0]])||"";
+        h+="<tr><th>"+f[1]+"</th><td>"+md(plain(val))+"</td><td>"+md(e.quote||"[확인 필요]")+"</td><td>"+md(e.note||"")+"</td></tr>";});
+      h+="</tbody></table>";
+    });
+    if(any){document.getElementById("ev").innerHTML=h;document.getElementById("evbox").hidden=false;}
   }
 
   // ---- 텍스트 만들기
@@ -252,6 +311,7 @@ body.editing [contenteditable="true"]{outline:1px dashed #f59f00;background:#fff
   });
   document.getElementById("btnPrint").addEventListener("click",function(){window.print();});
   render();
+  renderEvidence();
 })();
 </script>
 </body>

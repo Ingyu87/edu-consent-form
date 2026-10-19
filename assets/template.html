@@ -49,6 +49,13 @@ tr.row > td{border-bottom:2pt double #000}
   display:flex;align-items:center;justify-content:center;font-weight:700;padding:2pt 4pt;text-indent:0;white-space:nowrap}
 .box{display:inline-block;width:0.9em;height:0.9em;border:0.6pt solid #000;vertical-align:-0.12em;margin:0 0.5em 0 0.9em;background:transparent}
 .need{background:#fff3bf;outline:1px dashed #f59f00}
+/* 근거표(접기) */
+details.ev{max-width:650px;margin:14px auto 0;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.12);padding:10px 12px;font-size:13px;line-height:1.5}
+details.ev summary{cursor:pointer;font-weight:700;font-size:14px}
+details.ev h3{font-size:14px;margin:12px 0 4px} details.ev ul{margin:0 0 6px;padding-left:18px}
+details.ev table{border-collapse:collapse;width:100%;table-layout:fixed}
+details.ev th,details.ev td{border:1px solid #999;padding:4px 6px;vertical-align:top;word-break:keep-all;overflow-wrap:anywhere}
+details.ev th{background:var(--head-bg)}
 
 /* 클릭 복사 */
 .cp{cursor:copy;border-radius:2px;transition:background .12s}
@@ -66,7 +73,7 @@ body.editing [contenteditable="true"]{outline:1px dashed #f59f00;background:#fff
 #toast.on{opacity:.92;transform:translateX(-50%) translateY(0)}
 
 @media print{
-  body{background:#fff;padding:0} .toolbar,.hint,.blkcopy,#toast{display:none!important}
+  body{background:#fff;padding:0} .toolbar,.hint,.blkcopy,#toast,details.ev{display:none!important}
   .sheet{box-shadow:none;padding:0;max-width:none} .cp:hover{background:none} .need{background:none;outline:none}
   thead{display:table-header-group} tr.row{break-inside:auto}
   @page{size:A4;margin:15mm 14mm}
@@ -87,6 +94,7 @@ body.editing [contenteditable="true"]{outline:1px dashed #f59f00;background:#fff
   <thead><tr><th>구분</th><th>개인정보 수집·이용·제공 동의 및 제3자 제공 등 고지</th></tr></thead>
   <tbody id="rows"></tbody>
 </table></div>
+<details class="ev" id="evbox" hidden><summary>근거표 보기 (동의서 값 ↔ 처리방침 원문)</summary><div id="ev"></div></details>
 <div id="toast" role="status" aria-live="polite">복사됨</div>
 
 <!-- ===== 데이터: 이 JSON만 바꾸면 표가 만들어집니다. **글자** = 굵게 ===== -->
@@ -164,6 +172,22 @@ body.editing [contenteditable="true"]{outline:1px dashed #f59f00;background:#fff
       var btn=document.createElement("button");btn.type="button";btn.className="blkcopy";btn.textContent="칸 복사";
       btn.addEventListener("click",function(e){e.stopPropagation();copyNode(b,btn);});b.appendChild(btn);
     });
+  }
+
+  function renderEvidence(){
+    var F=[["recipient","운영사(제공받는 자)"],["purpose","수집·이용 목적"],["items","수집 항목"],["retention","보유 및 이용 기간"],["overseas","국외 이전"]];
+    var h="",any=false;
+    (DATA.services||[]).forEach(function(s){
+      var ev=s.evidence||{},p=s.policy||{};
+      if(!s.evidence&&!s.policy)return; any=true;
+      h+="<h3>"+esc(s.name)+"</h3><ul><li>처리방침: "+md(p.url||"[확인 필요]")+"</li><li>버전(시행일): "+md(p.version||"[확인 필요]")+"</li><li>확인한 날짜: "+md(p.checked||"[확인 필요]")+"</li></ul>";
+      h+="<table><thead><tr><th style=\"width:17%\">항목</th><th style=\"width:25%\">동의서에 쓴 값</th><th>처리방침 원문</th><th style=\"width:22%\">비고</th></tr></thead><tbody>";
+      F.forEach(function(f){var e=ev[f[0]]||{};
+        var val=e.value||(f[0]==="recipient"?(s.thirdParty||{}).recipient:f[0]==="overseas"?(s.overseas?[s.overseas.recipient,s.overseas.method,s.overseas.items].join(" / "):"없음"):(s.collect||{})[f[0]])||"";
+        h+="<tr><th>"+f[1]+"</th><td>"+md(plain(val))+"</td><td>"+md(e.quote||"[확인 필요]")+"</td><td>"+md(e.note||"")+"</td></tr>";});
+      h+="</tbody></table>";
+    });
+    if(any){document.getElementById("ev").innerHTML=h;document.getElementById("evbox").hidden=false;}
   }
 
   // ---- 텍스트 만들기
@@ -247,6 +271,7 @@ body.editing [contenteditable="true"]{outline:1px dashed #f59f00;background:#fff
   });
   document.getElementById("btnPrint").addEventListener("click",function(){window.print();});
   render();
+  renderEvidence();
 })();
 </script>
 </body>
